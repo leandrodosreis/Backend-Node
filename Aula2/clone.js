@@ -93,8 +93,14 @@ entradaDeDados.question('Digite o nome do aluno: ', function(nome){
 
                     //validação de entrada vazia
                     let media = calculosAula2.calcularMedia(nota1, nota2, nota3, nota4)
-                    console.log(nomeAluno, media)
+                    let status = calculosAula2.analiseStatusAluno(media)
 
+                    if(media){
+                        console.log(media)
+                    }else{
+                        console.log("Opa, algo deu errado")
+                        entradaDeDados.close
+                    }
                 })
             })
         })
