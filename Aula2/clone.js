@@ -95,8 +95,8 @@ entradaDeDados.question('Digite o nome do aluno: ', function(nome){
                     let media = calculosAula2.calcularMedia(nota1, nota2, nota3, nota4)
                     let status = calculosAula2.analiseStatusAluno(media)
 
-                    if(media){
-                        console.log(media)
+                    if(media && status){
+                        console.log("Deu certo")
                     }else{
                         console.log("Opa, algo deu errado")
                         entradaDeDados.close
