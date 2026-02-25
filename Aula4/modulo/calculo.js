@@ -37,19 +37,19 @@ const calcular = function(numero1, numero2, operador){
     //Processamento 2
     switch (operadorMat) {
         case "SOMAR":
-            resultado = valor1 + valor2
+            resultado = somar(valor1, valor2)
             break;
 
         case "SUBTRAIR":
-            resultado = valor1 - valor2
+            resultado = subtrair(valor1, valor2)
             break
 
         case "DIVIDIR":
-            resultado = valor1 / valor2
+            resultado = dividir(valor1, valor2)
             break
 
         case "MULTIPLICAR":
-            resultado = valor1 * valor2
+            resultado = multiplicar(valor1, valor2)
             break
     
         default:
@@ -73,6 +73,41 @@ const calcular = function(numero1, numero2, operador){
 
 }
 
+//Função baseada em formato de seta (Arrow function)
+const somar = (numero1, numero2) => Number(numero1) + Number(numero2)
+const subtrair = (numero1, numero2) => Number(numero1) - Number(numero2)
+const multiplicar = (numero1, numero2) => Number(numero1) * Number(numero2)
+const dividir = (numero1, numero2) => Number(numero1) / Number(numero2)
+// OU
+//     {
+//     let valor1 = Number(numero1)
+//     let valor2 = Number(numero2)
+
+//     let resultado = valor1 + valor2
+
+//     return resultado
+// }
+
 //chamando a função para testar
-let result = calcular(20, 10, "somar")
-console.log(result)
+// let result = calcular(20, 20, "subtrair")
+// console.log(result)
+
+function validacaoLetras(numero1, numero2, operador){
+
+    let digito1 = Number(numero1)
+    let digito2 = Number(numero2)
+    let tipoCalculo = String(operador)
+
+    if(operador == "" || numero1 == "" || numero2 == "" || isNaN(numero1) || isNaN(numero2) || !isNaN(operador)){
+        return false
+        
+    }
+
+    return true
+}
+
+
+
+module.exports = {
+    calcular, somar, subtrair, dividir, multiplicar, validacaoLetras
+}
