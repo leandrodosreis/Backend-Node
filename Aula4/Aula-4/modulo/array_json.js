@@ -30,9 +30,9 @@ JSON -> É um espaço na memoria para armazenar dados em CHAVE e VALOR
 */
 
 // Criando objetos do tipo array
-const listaDeAlunos     = ['Jose', 'Maria', 'Luiz', 'Antonio', 'Carlos']
-const listaDeClientes   = []
-const listaDeFornecedores = []
+const listaDeAlunos         = ['Jose', 'Maria', 'Luiz', 'Antonio', 'Carlos']
+const listaDeClientes       = []
+const listaDeFornecedores   = []
 
 const exibirDados = function(){
     //Exibe o objeto array com o seu conteudo
@@ -120,9 +120,71 @@ const manipularDados = function(){
     listaDeFornecedores.push('Caio')
     listaDeFornecedores.push('Luiz')
     listaDeFornecedores.push('Hugo', 'Maria', 'jose')
-    
     console.log(listaDeFornecedores)
+
+    //permite adicionar novos elementos no array sempre no inicio
+    //Após adicionar o elemento, ele reorganiza todos os outros itens
+    listaDeFornecedores.unshift('Luciano')
+    console.table(listaDeFornecedores)
+
+    //Permite adicionar um novo elemento em uma determinada posição do array
+                    //.splice(indice, qtdeDeElementos, 'Novo conteudo')
+    listaDeFornecedores.splice(3,0, 'Bernardo')
+    console.table(listaDeFornecedores)
+
+    //Permite remover um determinado conteudo com base no indice do elemento array
+                    //.splice(indice, qtde de elementos a ser removido)
+    listaDeFornecedores.splice(6,1)
+    console.table(listaDeFornecedores)
+
+    //Permite remover o ultimo elemento do array
+    listaDeFornecedores.pop()
+    console.table(listaDeFornecedores)
+
+    //Permite remover o primeiro elemento do array
+    //Apos ele remover ira reorganizar todos os elemetnos
+    listaDeFornecedores.shift()
+    console.table(listaDeFornecedores)
 }
 
-exibirDados()
-// manipularDados()
+// função para percorrer array com while selecionar oque queremos e apagar
+function descobrirIndice(nome){
+    
+    //indexOf() Retorna o indice referente aoo conteudo que esta sendo pesquisado
+    listaDeAlunos.splice(listaDeAlunos.indexOf(nome),1)
+    console.table(listaDeAlunos)
+
+
+    // let cont = 0
+    // let qtd = listaDeAlunos.length
+
+    // while(cont<qtd){
+
+    //     if(nome == listaDeAlunos[cont]){
+
+    //         listaDeAlunos.splice(cont,1)
+    //     }
+    //     cont++
+    // }
+    // console.table(listaDeAlunos.indexOf(nome))
+
+    
+    // for(cont in listaDeAlunos){
+    //     if(nome == listaDeAlunos[cont]){
+    //         listaDeAlunos.splice(cont,1)
+    //     }
+    // }
+    // console.table(listaDeAlunos)
+
+
+}
+
+const verificarItem = function(nomeAluno){
+    //Verifica se o conteudo existe dentro do arraye retorna um boolean
+    return listaDeAlunos.includes(nomeAluno)
+}
+
+//exibirDados()
+//manipularDados()
+//descobrirIndice('Maria')
+verificarItem('Maria')
