@@ -184,7 +184,135 @@ const verificarItem = function(nomeAluno){
     return listaDeAlunos.includes(nomeAluno)
 }
 
+const manipularDadosJson = function(){
+    //Criando um objeto Json
+    //A estrutura do json é chave(atributo) : valor(conteudo)
+    let aluno = {
+        "id" : 1, 
+        "nome" : "Jose da Silva", 
+        "ra" : 123456, 
+        "email" : "jose@gmail.com",
+        "habilidades": ["JavaScript", "Python", "Java"]}
+
+    //console.table(aluno)
+
+    //Exibe o conteudo de um atributo
+    //console.log(aluno.nome)
+
+    //adiciona um novo atributo no json ja existente
+    aluno.telefone = "119888888"
+    aluno.data_nascimento = "11/03/8888"
+    console.log(aluno)
+
+    delete aluno.email
+    console.log(aluno)
+
+    aluno.ra = 99999
+    console.table(aluno)
+
+    aluno.nota = null
+    console.table(aluno)
+}
+
+const cadastroDeProdutos = function(){
+
+    let cores = [
+                    {"id" : 1, "cor" : "branco", "hexa": "#ffffff"},    //0
+                    {"id" : 2, "cor" : "preto", "hexa": "#000000"},     //1
+                    {"id" : 3, "cor" : "azul", "hexa": "#0000ff"},      //2
+                    {"id" : 4, "cor" : "amarelo", "hexa": "#000000"},   //3
+                    {"id" : 5, "cor" : "rosa", "hexa": "#ffb5c0"}       //4
+                ]
+
+    let marcas = [
+                    {"id" : 1, "marca" : "samsung", "telefone": 11, "email" : "samsung@gmail"},
+                    {"id" : 2, "marca" : "apple", "telefone": 12, "email" : "apple@gmail"},
+                    {"id" : 3, "marca" : "dell", "telefone": 13, "email" : "dell@gmail"},
+                    {"id" : 4, "marca" : "nokia", "telefone": 14, "email" : "nokia@gmail"},
+                    {"id" : 5, "marca" : "asus", "telefone": 15, "email" : "asus@gmail"},
+                    {"id" : 6, "marca" : "alienware", "telefone": 16, "email" : "alienware@gmail"}
+                ]
+
+    let produtos = [
+        {   "id" : 1,
+            "nome" : "monitor",
+            "descricao" : "monitor de 27 polegadas",
+            "valor" : 1500,
+            "qtde" : 20,
+            "cor" : [
+                    cores[0],
+                    cores[1]
+                    ],
+            "marca" : [marcas[3].marca]
+        },
+        {
+            "id" : 2,
+            "nome" : "teclado",
+            "descricao" : "teclado mecanico rgb",
+            "valor" : 250,
+            "qtde" : 500,
+            "cor" : cores,
+            "marca" : [marcas[4].marca, marcas[5].marca, marcas[3].marca]
+        },
+        {
+            "id" : 3,
+            "nome" : "mouse",
+            "descricao" : "mouse sem fio",
+            "valor" : 80,
+            "qtde" : 160,
+            "cor" : [
+                    cores[1],
+                    cores[3],
+                    cores[4]
+            ],
+            "marca" : [marcas[1].marca, marcas[4].marca, marcas[2].marca]
+        },
+
+       
+        
+    ]
+ //exercicio
+
+    // for(let contIn = 0; produtos.length; contIn+1){
+    //     console.log(
+    //         `Produto: ${produtos}`
+    //     )
+
+    // }
+    produtos.forEach(function(itemProduto){
+        console.log(`**Produto: ${itemProduto.nome}\nQuantidade: ${itemProduto.qtde}\nValor: ${itemProduto.valor}` ) 
+
+        itemProduto.cor.forEach(function(itemCor){
+            console.log(`cor ${itemCor.cor}`)
+        })
+
+        itemProduto.marca.forEach(function(itemMarca){
+            console.log(`Marca ${itemMarca}**`)
+        })
+    })
+
+
+    //console.log(produtos)
+
+    // console.log(produtos[0].cor)
+
+    // //exibindo todas as cores referente ao produto cor
+    // produtos[0].cor.forEach(function(itemCor){
+    //     console.table(itemCor.cor)
+    // })
+
+                // console.table(cores[2].cor)
+                // //estou indo no indice 2 do array estou chamando o atributo 'cor' do json
+
+                // cores.forEach(function(itemCor){
+                //     console.log(itemCor.cor)
+                // })
+                // //Percorra todo o array cores e mostre no console o valor da propriedade cor de cada objeto.
+}
+
+cadastroDeProdutos()
+//manipularDadosJson()
 //exibirDados()
 //manipularDados()
 //descobrirIndice('Maria')
-verificarItem('Maria')
+//verificarItem('Maria')
