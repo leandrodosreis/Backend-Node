@@ -279,16 +279,47 @@ const cadastroDeProdutos = function(){
     //     )
 
     // }
-    produtos.forEach(function(itemProduto){
-        console.log(`**Produto: ${itemProduto.nome}\nQuantidade: ${itemProduto.qtde}\nValor: ${itemProduto.valor}` ) 
 
+    //permite extrais os produtos
+    produtos.forEach(function(itemProduto){
+        console.log(`** Produto: ${itemProduto.nome} **\nQuantidade: ${itemProduto.qtde}\nValor: ${itemProduto.valor}` ) 
+
+        //permite extrair as cores de cada produto
         itemProduto.cor.forEach(function(itemCor){
             console.log(`cor ${itemCor.cor}`)
         })
 
+        //permite extrair as marcas de cada produto
         itemProduto.marca.forEach(function(itemMarca){
             console.log(`Marca ${itemMarca}**`)
+            
         })
+        console.log('*****************\n')
+    })
+
+    //filtrando podutos pelo nome
+    console.log('Exemplo de como pesquisar um produto pelo nome')
+
+    let nomeProduto = 'Teclado'
+    produtos.forEach(function(itemProduto){
+        if(String(nomeProduto).toUpperCase() == String(itemProduto.nome).toUpperCase())
+            console.log(itemProduto)
+    })
+
+    //filtrando podutos pela cor
+    console.log('Exemplo de como pesquisar um produto pela cor')
+
+    let filtroCor = "azul"
+    produtos.forEach(function(itemProduto){
+        
+        itemProduto.cor.forEach(function(itemCor){
+
+            if(filtroCor == itemCor.cor){
+                console.log(itemProduto)
+            }
+        })
+            
+
     })
 
 
