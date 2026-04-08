@@ -51,6 +51,24 @@ app.get('/v1/senai/estados', function(request, response){
     }
 })
 
+//ENDPOINT VIA QUERY
+//Retorna dados de um estado filtrando pela sigla
+// app.get('/v1/senai/dados/estado/:uf', function(request, response){
+    // app.get('/v1/senai/dados/estado/', function(request, response){
+    
+    //     let sigla = request.query.uf
+    //     let estado = estadosCidades.getDadosEstado(sigla)
+    //     if(estado){
+    //         response.status(200)
+    //         response.json(estado)
+    //     }else{
+    //         response.status(404)
+    //         response.json({'message': "Algo deu errado"})
+                
+    //         }
+    // })
+
+//ENDPOINNT VIA PARAMS
 //Retorna dados de um estado filtrando pela sigla
 app.get('/v1/senai/dados/estado/:uf', function(request, response){
     let sigla = request.params.uf
@@ -61,9 +79,10 @@ app.get('/v1/senai/dados/estado/:uf', function(request, response){
     }else{
         response.status(404)
         response.json({'message': "Algo deu errado"})
-        
+            
     }
 })
+
 
 //Retorna dados da capital filtrando pela sigla do estado
 app.get('/v1/senai/dados/capital/estado/:uf', function(request, response){
