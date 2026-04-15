@@ -68,6 +68,7 @@ app.get('/v1/senai/estados', function(request, response){
     //         }
     // })
 
+    
 //ENDPOINNT VIA PARAMS
 //Retorna dados de um estado filtrando pela sigla
 app.get('/v1/senai/dados/estado/:uf', function(request, response){
