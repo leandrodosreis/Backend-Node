@@ -5,7 +5,16 @@ Autor: Marcel
 Versão: 1.0
 */
 
-// Função para inserir um novo silme no banco de dados
+//Import da biblioteca para manipular dados no banco de dados mysql
+const knex = require('knex')
+
+//Import do arquivo de configuração para acesso ao banco de dados
+const knexDatabaseConfig = require('../../database_config/knexConfig.js')
+
+// Criar a conexão com o BD Mysql conforme o arquivo de configuração
+const knexConection = knex(knexDatabaseConfig.development)
+
+// Função para inserir um novo filme no banco de dados
 const insertFilme = async function(filme){
     let sql = `insert into tbl_filme (
 	nome,
@@ -25,6 +34,14 @@ const insertFilme = async function(filme){
     '${filme.avaliacao}'
 );`
 
+// Encaminha para o BD o scriptSQL
+let result = await knexConection.raw(sql)
+
+if(result){
+    return true
+}else{
+    return false
+}
 }
 
 // Função para atualizar um filme existente no banco de dados
