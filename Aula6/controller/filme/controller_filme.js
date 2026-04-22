@@ -12,9 +12,65 @@ const configMessages = require('../modulo/configMessages.js')
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 
 // Função para inserir um novo filme 
-const inserirNovoFilme = async function(filme){
+const inserirNovoFilme = async function(filme, contentType){
 
     //Cria uma copia dos JSON do arquivo de configuração de mensagens
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+            
+        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+
+            //Chama a função para validar a entrada de dados do filme
+            let validar = await validarDados(filme)
+
+
+            //Retorna um json de erro caso algum atributo seja invalido, senão retorna um false(Nâo teve erro)
+            if(validar){
+                return validar //400
+            }
+            else{
+                //Encaminha os dados do filme para o DAO inserir no banco de dados
+                let result = await filmeDAO.insertFilme(filme)
+
+                if(result){ //201
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
+                    customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
+                
+                    return customMessage.DEFAULT_MESSAGE 
+                }else{ //erro 500 (Model)
+                    return customMessage.ERROR_INTERNAL_SERVER_MODEL
+                    // customMessage.DEFAULT_MESSAGE.status = customMessage.ERROR_INTERNAL_SERVER_MODEL.status
+                    // customMessage.DEFAULT_MESSAGE.status_code = customMessage.ERROR_INTERNAL_SERVER_MODEL.status_code
+                    // customMessage.DEFAULT_MESSAGE.message = customMessage.ERROR_INTERNAL_SERVER_MODEL.message
+                }
+
+            }
+        }else{
+            return customMessage.ERROR_CONTENT_TYPE //415
+        }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 (CONTROLLER)
+    }
+
+}
+
+// Função para atualizar um filme
+const atualizarFilme = async function(){}
+
+// Função para retornar todos os filmes
+const listarFilme = async function(){}
+
+// Função para retornar um filme filtrando pelo ID
+const buscarFilme = async function(){}
+
+// Função para excluir um filme
+const excluirFilme = async function(){}
+
+const validarDados = async function(filme){
+
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     if(filme.nome == '' || filme.nome == null || filme.nome == undefined || filme.nome.length > 80){
@@ -46,34 +102,10 @@ const inserirNovoFilme = async function(filme){
         return customMessage.ERROR_BAD_REQUEST
 
     }else{
-        //Encaminha os dados do filme para o DAO inserir no banco de dados
-        let result = await filmeDAO.insertFilme(filme)
-
-        if(result){
-            customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
-            customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
-            customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
-        }else{
-            customMessage.DEFAULT_MESSAGE.status = customMessage.ERROR_INTERNAL_SERVER_MODEL.status
-            customMessage.DEFAULT_MESSAGE.status_code = customMessage.ERROR_INTERNAL_SERVER_MODEL.status_code
-            customMessage.DEFAULT_MESSAGE.message = customMessage.ERROR_INTERNAL_SERVER_MODEL.message
-        }
-
-        return customMessage.DEFAULT_MESSAGE
+        return false
     }
+
 }
-
-// Função para atualizar um filme
-const atualizarFilme = async function(){}
-
-// Função para retornar todos os filmes
-const listarFilme = async function(){}
-
-// Função para retornar um filme filtrando pelo ID
-const buscarFilme = async function(){}
-
-// Função para excluir um filme
-const excluirFilme = async function(){}
 
 module.exports = {
     inserirNovoFilme,
