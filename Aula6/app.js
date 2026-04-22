@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 //Permitindo a utilização do body das requisições
-const bodyParserJSON = bodyParser.json
+const bodyParserJSON = bodyParser.json()
 
 //Criando um objeto do express para criar a API
 const app = express()
