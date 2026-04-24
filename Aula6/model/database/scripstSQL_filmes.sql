@@ -47,4 +47,12 @@ insert into tbl_filme (
 );
 
 #Permite visualizar conteudos e valores adicionados a tabela
-select * from tbl_filme;
+#select * from tbl_filme;
+
+#Mostra a tabela em ordem decrscente
+select * from tbl_filme order by id desc;
+
+#Deleta tudo acima de id 0
+#delete from tbl_filme where id > 0;
+
+select * from tbl_filme where id = 27;
