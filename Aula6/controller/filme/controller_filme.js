@@ -79,10 +79,11 @@ const listarFilme = async function(){
 
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                customMessage.DEFAULT_MESSAGE.response.count = result.length
                 customMessage.DEFAULT_MESSAGE.response.filme = result
 
-                return customMessage.DEFAULT_MESSAGE
-                
+                return customMessage.DEFAULT_MESSAGE //200
+
             }else{
                 return customMessage.ERROR_NOT_FOUND //404
             }
@@ -97,7 +98,50 @@ const listarFilme = async function(){
 }
 
 // Função para retornar um filme filtrando pelo ID
-const buscarFilme = async function(){}
+const buscarFilme = async function(id){
+
+    //Cria uma copia dos JSON do arquivo de configuração de mensagens
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+
+        //validaçãopara garantir que o id seja um numero valido
+        if(String(id).replaceAll(' ', '') == '' || id == null || id == undefined || isNaN(id)){
+
+            customMessage.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
+            return customMessage.ERROR_BAD_REQUEST //400 
+
+        }else{
+
+            //Chama a função do DAO para pesquisar filme pelo id
+            let result = await filmeDAO.selectByIdFilme(id)
+
+            //Validação para verificar se o DAO retornou dados ou um false
+            if(result){
+
+                //Validação para verificar se o DAO tem algum dado no Array
+                if(result.length > 0){
+
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                    customMessage.DEFAULT_MESSAGE.response.filme = result
+
+                    return customMessage.DEFAULT_MESSAGE //200 
+
+                }else{
+                    return customMessage.ERROR_NOT_FOUND //404
+                }
+
+            }else{
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 MODEL
+            }
+            
+        }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 CONTROLLER
+    }
+}
 
 // Função para excluir um filme
 const excluirFilme = async function(){}
