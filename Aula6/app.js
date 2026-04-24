@@ -38,6 +38,14 @@ app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, res
     response.json(result)
 })
 
+//Não precisamos de bodyParserJson pois não vamos inserir nada no 'corpo'
+app.get('/v1/senai/locadora/filme', async function(request, response){
+    let result = await controllerFilme.listarFilme()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
 //Fazer o start na API(aguardando as requisições)
 app.listen(3030, function(){
     console.log('API aguaradando novas requisições ...')

@@ -61,7 +61,40 @@ const inserirNovoFilme = async function(filme, contentType){
 const atualizarFilme = async function(){}
 
 // Função para retornar todos os filmes
-const listarFilme = async function(){}
+const listarFilme = async function(){
+    
+    //Cria uma copia dos JSON do arquivo de configuração de mensagens
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        //Chama a função do DAO para retornar a lista de filme do banco de dados
+        let result = await filmeDAO.selectAllFilme()
+
+        //Validação para verificar se o dao conseguiu processar o script no bd
+        if(result){
+
+            //Validação para verificar se o conteudo do arrray tem dados de 
+            //retorno ou se esta vazio
+            if(result.length > 0){
+
+                customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+                customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                customMessage.DEFAULT_MESSAGE.response.filme = result
+
+                return customMessage.DEFAULT_MESSAGE
+                
+            }else{
+                return customMessage.ERROR_NOT_FOUND //404
+            }
+
+        }else{
+            return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 (MODEL)
+        }
+        
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 (CONTROLLER)
+    }
+}
 
 // Função para retornar um filme filtrando pelo ID
 const buscarFilme = async function(){}
