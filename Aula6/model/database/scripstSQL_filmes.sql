@@ -56,3 +56,13 @@ select * from tbl_filme order by id desc;
 #delete from tbl_filme where id > 0;
 
 select * from tbl_filme where id = 27;
+
+update tbl_filme set
+	nome = 'Filme 05',
+	sinopse = 'alterei a sinopse',
+	capa = 'alala',
+	data_lancamento = '2026-04-29',
+	duracao = '02:30:00',
+	valor = '10',
+	avaliacao = 2
+where id = 4;
