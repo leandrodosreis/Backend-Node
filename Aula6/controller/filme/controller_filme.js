@@ -204,11 +204,7 @@ const excluirFilme = async function(id){
 
             let result = await filmeDAO.deleteFilme(id)
             if(result){
-                customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_DELETED_ITEM.status
-                customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_DELETED_ITEM.status_code
-                customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_DELETED_ITEM.message
-
-                return customMessage.DEFAULT_MESSAGE //204
+                return customMessage.SUCCESS_DELETED_ITEM//204 ou 200
 
             }else{
                 return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 Model

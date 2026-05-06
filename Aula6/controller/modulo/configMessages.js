@@ -26,7 +26,7 @@ const ERROR_INTERNAL_SERVER_CONTROLLER  = {status: false, status_code: 500, mess
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Item inserido com sucesso!'}
 const SUCCESS_RESPONSE     = {status: true, status_code: 200}
 const SUCCESS_UPDATED_ITEM = {status: true, status_code: 200, message: 'Item atualizado com sucesso!'}
-const SUCCESS_DELETED_ITEM = {status: true, status_code: 204, message: 'Item deletado com sucesso!'}
+const SUCCESS_DELETED_ITEM = {status: true, status_code: 200, message: 'Item deletado com sucesso!'}
 
 module.exports = {
     DEFAULT_MESSAGE,

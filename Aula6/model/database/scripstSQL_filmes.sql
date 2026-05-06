@@ -55,8 +55,13 @@ select * from tbl_filme order by id desc;
 #Deleta tudo acima de id 0
 #delete from tbl_filme where id > 0;
 
+#Deleta o id 
+delete from tbl_filme where id = 3;
+
+#seleciona uma tabela por id
 select * from tbl_filme where id = 27;
 
+#atualiza atributos de uma tabela
 update tbl_filme set
 	nome = 'Filme 05',
 	sinopse = 'alterei a sinopse',
