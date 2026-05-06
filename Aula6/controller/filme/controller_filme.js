@@ -34,9 +34,12 @@ const inserirNovoFilme = async function(filme, contentType){
                 let result = await filmeDAO.insertFilme(filme)
 
                 if(result){ //201
+                    //Cria o id no Json do filme e adiciona o id gerado no DAO
+                    filme.id = result
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
+                    customMessage.DEFAULT_MESSAGE.response = filme
                 
                     return customMessage.DEFAULT_MESSAGE 
                 }else{ //erro 500 (Model)
@@ -85,6 +88,7 @@ const atualizarFilme = async function(filme, id, contentType){
                         customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCCESS_UPDATED_ITEM.message
+                        customMessage.DEFAULT_MESSAGE.response    = filme
 
                         return customMessage.DEFAULT_MESSAGE //200 atualizado
                     }else{
