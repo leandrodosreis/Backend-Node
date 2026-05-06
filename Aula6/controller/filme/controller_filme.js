@@ -31,7 +31,7 @@ const inserirNovoFilme = async function(filme, contentType){
             }
             else{
                 //Encaminha os dados do filme para o DAO inserir no banco de dados
-                let result = await filmeDAO.insertFilme(filme)
+                let result = await filmeDAO.insertFilme(await tratarDados(filme))
 
                 if(result){ //201
                     //Cria o id no Json do filme e adiciona o id gerado no DAO
@@ -74,7 +74,7 @@ const atualizarFilme = async function(filme, id, contentType){
 
             if(resultBuscarFilme.status){
                 //Chama a função para validar os dados de alteração do filme
-                let validar = await validarDados(filme)
+                let validar = await validarDados(await tratarDados(filme))
 
                 if(!validar){
 
@@ -260,6 +260,19 @@ const validarDados = async function(filme){
     }
 
 }
+
+const tratarDados = async function(filme) {
+    //Tratamento para eliminar chegada de aspas como caracter invalido
+    filme.nome            = filme.nome.replaceAll("'", "")
+    filme.sinopse         = filme.sinopse.replaceAll("'", "")
+    filme.capa            = filme.capa.replaceAll("'", "")
+    filme.data_lancamento = filme.data_lancamento.replaceAll("'", "")
+    filme.duracao         = filme.duracao.replaceAll("'", "")
+    filme.valor           = filme.valor.replaceAll("'", "")
+    filme.avaliacao       = filme.avaliacao.replaceAll("'", "")
+
+    return filme
+} 
 
 module.exports = {
     inserirNovoFilme,
