@@ -71,3 +71,8 @@ update tbl_filme set
 	valor = '10',
 	avaliacao = 2
 where id = 4;
+
+create table tbl_genero (
+	id	int not null auto_increment primary key,
+    nome	varchar(40) not null
+);
