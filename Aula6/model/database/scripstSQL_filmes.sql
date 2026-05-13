@@ -76,3 +76,12 @@ create table tbl_genero (
 	id	int not null auto_increment primary key,
     nome	varchar(40) not null
 );
+
+insert into tbl_genero (
+                    nome
+                    ) values (
+                    'Leandro'
+                    );
+
+select * from tbl_genero order by id desc;
+
