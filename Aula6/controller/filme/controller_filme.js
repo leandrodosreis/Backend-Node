@@ -60,58 +60,6 @@ const inserirNovoFilme = async function(filme, contentType){
 
 }
 
-// Função para atualizar um filme
-const atualizarFilme = async function(filme, id, contentType){
-    let customMessage = JSON.parse(JSON.stringify(configMessages))
-
-    try {
-        
-        //Validação para verificar se o conteudo do body é um JSON
-        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
-
-            //Chama a função para buscar filme e validar se o id esta correto,se o id existe no bd, e se o filme existe
-            let resultBuscarFilme = await buscarFilme(id)
-
-            if(resultBuscarFilme.status){
-                //Chama a função para validar os dados de alteração do filme
-                let validar = await validarDados(await tratarDados(filme))
-
-                if(!validar){
-
-                    //Adiciona um atributo id no json de filme para enviar ao DAO um unico objeto
-                    filme.id = Number(id)
-
-                    //Chama a função para atualizar o filme no bd
-                    let result = await filmeDAO.updateFilme(filme)
-
-                    if(result){
-                        customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCCESS_UPDATED_ITEM.status
-                        customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
-                        customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCCESS_UPDATED_ITEM.message
-                        customMessage.DEFAULT_MESSAGE.response    = filme
-
-                        return customMessage.DEFAULT_MESSAGE //200 atualizado
-                    }else{
-                        return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 model
-                    }
-
-                }else{
-                    return validar //400 validação dos campos do bd
-                }
-
-            }else{
-                return resultBuscarFilme //400(id invalido) ou 404(não encontrado) ou 500
-            }
-
-        }else{
-            return customMessage.ERROR_CONTENT_TYPE //415
-        }
-
-    } catch (error) {
-        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 (Controller)
-    }
-}
-
 // Função para retornar todos os filmes
 const listarFilme = async function(){
     
@@ -192,6 +140,58 @@ const buscarFilme = async function(id){
 
     } catch (error) {
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 CONTROLLER
+    }
+}
+
+// Função para atualizar um filme
+const atualizarFilme = async function(filme, id, contentType){
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        
+        //Validação para verificar se o conteudo do body é um JSON
+        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+
+            //Chama a função para buscar filme e validar se o id esta correto,se o id existe no bd, e se o filme existe
+            let resultBuscarFilme = await buscarFilme(id)
+
+            if(resultBuscarFilme.status){
+                //Chama a função para validar os dados de alteração do filme
+                let validar = await validarDados(await tratarDados(filme))
+
+                if(!validar){
+
+                    //Adiciona um atributo id no json de filme para enviar ao DAO um unico objeto
+                    filme.id = Number(id)
+
+                    //Chama a função para atualizar o filme no bd
+                    let result = await filmeDAO.updateFilme(filme)
+
+                    if(result){
+                        customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCCESS_UPDATED_ITEM.status
+                        customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
+                        customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCCESS_UPDATED_ITEM.message
+                        customMessage.DEFAULT_MESSAGE.response    = filme
+
+                        return customMessage.DEFAULT_MESSAGE //200 atualizado
+                    }else{
+                        return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 model
+                    }
+
+                }else{
+                    return validar //400 validação dos campos do bd
+                }
+
+            }else{
+                return resultBuscarFilme //400(id invalido) ou 404(não encontrado) ou 500
+            }
+
+        }else{
+            return customMessage.ERROR_CONTENT_TYPE //415
+        }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500 (Controller)
     }
 }
 
