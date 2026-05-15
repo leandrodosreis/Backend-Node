@@ -23,8 +23,8 @@ const insertGenero = async function(genero){
                     nome
                     ) values (
                     '${genero.nome}'
-                    );
-        `
+        );`
+
         let result = await knexConection.raw(sql)
 
         if(result){

@@ -23,6 +23,7 @@ app.use(cors(cosrsOptions))
 //Import das controllers
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
+const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
 
 //ENDPOINTS FILME
 app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, response){
@@ -144,6 +145,21 @@ app.delete('/v1/senai/locadora/genero/:id', async function (request, response) {
     response.status(result.status_code)
     response.json(result)
     
+})
+
+//ENDPOINTS CLASSIFICACAO
+
+app.post('v1/senai/locadora/classificacao', bodyParserJSON, async function (request, response) {
+    
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerClassificacao.inserirNovaClassificacao(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+
 })
 
 //Logica da ordem DAO > Controller > app

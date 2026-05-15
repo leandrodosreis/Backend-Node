@@ -85,3 +85,8 @@ insert into tbl_genero (
 
 select * from tbl_genero order by id desc;
 
+create table tbl_classificacao (
+	id				int not null auto_increment primary key,
+    publico 	varchar(50)
+	);
+
