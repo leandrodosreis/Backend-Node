@@ -99,6 +99,29 @@ const buscarGenero = async function (id) {
         if(id == undefined || String(id).replaceAll(' ','') == "" || id == null || isNaN(id) || id <= 0 ){
             customMessage.ERROR_BAD_REQUEST.field = "[ID] INVALIDO"
             return customMessage.ERROR_BAD_REQUEST
+
+        }else{
+
+            let result = await generoDAO.selectByIdGenero(id)
+
+            if(result){
+
+                if(result.length > 0){
+
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                    customMessage.DEFAULT_MESSAGE.response.genero = result
+
+                    return customMessage.DEFAULT_MESSAGE
+                }else{
+
+                    return customMessage.ERROR_NOT_FOUND
+
+                }
+
+            }else{ 
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL
+            }
         }
         
     } catch (error) {
@@ -114,6 +137,46 @@ const atualizarGenero = async function (genero, id, contentType) {
 
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
             
+            let resultBuscarGenero = await buscarGenero(id)
+
+            if(resultBuscarGenero.status){
+
+                let validar = await validarDados(await tratarDados(genero))
+
+                if(!validar){
+                    
+                    genero.id = Number(id)
+
+
+                    let result = await generoDAO.updateGenero(genero)
+
+                    
+                    if(result){
+
+                        customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
+                        customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
+                        customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
+                        customMessage.DEFAULT_MESSAGE.response = genero
+
+                        return customMessage.DEFAULT_MESSAGE
+                    }else{
+                        return customMessage.ERROR_INTERNAL_SERVER_MODEL
+                    }
+
+                }else{
+                    
+                    return validar
+
+                }
+
+            }else{
+
+                return resultBuscarGenero
+
+            }
+
+        }else{
+            return customMessage.ERROR_CONTENT_TYPE
         }
         
     } catch (error) {

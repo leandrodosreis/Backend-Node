@@ -25,8 +25,6 @@ const insertGenero = async function(genero){
                     '${genero.nome}'
                     );
         `
-                    console.log(genero.nome);
-
         let result = await knexConection.raw(sql)
 
         if(result){
@@ -67,7 +65,7 @@ const selectAllGenero = async function(){
 
 const selectByIdGenero = async function(id){
     try {
-        let sql = `select * from tbl_genero where id=${id}`
+        let sql = `select * from tbl_genero where id=${id};`
 
         let result = await knexConection.raw(sql)
 

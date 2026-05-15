@@ -111,6 +111,30 @@ app.get('/v1/senai/locadora/genero', async function (request, response) {
     
 })
 
+app.get('/v1/senai/locadora/genero/:id', async function (request, response) {
+
+    let id = request.params.id
+
+    let result = await controllerGenero.buscarGenero(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/genero/:id', async function(request, response){
+
+    let contentType = request.headers['content-type']
+
+    let id = request.params.id
+
+    let dados = request.body
+
+    let result = await controllerGenero.atualizarGenero(dados, id, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
 //Logica da ordem DAO > Controller > app
 
 //Fazer o start na API(aguardando as requisições)
