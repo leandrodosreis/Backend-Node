@@ -121,7 +121,7 @@ app.get('/v1/senai/locadora/genero/:id', async function (request, response) {
     response.json(result)
 })
 
-app.put('/v1/senai/locadora/genero/:id', async function(request, response){
+app.put('/v1/senai/locadora/genero/:id', bodyParserJSON ,async function(request, response){
 
     let contentType = request.headers['content-type']
 
@@ -133,6 +133,17 @@ app.put('/v1/senai/locadora/genero/:id', async function(request, response){
 
     response.status(result.status_code)
     response.json(result)
+})
+
+app.delete('/v1/senai/locadora/genero/:id', async function (request, response) {
+
+    let id = request.params.id
+
+    let result = await controllerGenero.excluirGenero(id)
+
+    response.status(result.status_code)
+    response.json(result)
+    
 })
 
 //Logica da ordem DAO > Controller > app

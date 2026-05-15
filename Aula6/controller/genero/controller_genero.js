@@ -186,6 +186,28 @@ const atualizarGenero = async function (genero, id, contentType) {
 
 const excluirGenero = async function (id) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+
+        let resultBuscarGenero = await buscarGenero(id)
+
+        if(resultBuscarGenero.status){
+
+            let result = await generoDAO.deleteGenero(id)
+
+            if(result){
+                return customMessage.SUCCESS_DELETED_ITEM
+            }else{
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }else{
+            return resultBuscarGenero
+        }
+        
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 const validarDados = async function(genero){
