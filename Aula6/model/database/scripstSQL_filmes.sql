@@ -87,6 +87,17 @@ select * from tbl_genero order by id desc;
 
 create table tbl_classificacao (
 	id				int not null auto_increment primary key,
-    publico 	varchar(50)
+    sigla		varchar(5) not null,
+    nome		varchar(45) not null,
+    descricao 	varchar(200) not null
 	);
 
+##delete from tbl_filme;
+
+alter table tbl_filme
+	add column id_classificacao int not null,
+    add constraint FK_CLASSIFICACAO_FILME
+		foreign key (id_classificacao)
+        references tbl_classificacao(id);
+
+desc tbl_filme;

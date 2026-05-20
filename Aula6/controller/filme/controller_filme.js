@@ -11,6 +11,9 @@ const configMessages = require('../modulo/configMessages.js')
 //Import do arquivo do DAO para manipular os dados de filme no banco de dados
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 
+//Import das Controllers
+const controllerClassificacao = require('../classificacao/controller_classificacao.js')
+
 // Função para inserir um novo filme 
 const inserirNovoFilme = async function(filme, contentType){
 
@@ -77,6 +80,22 @@ const listarFilme = async function(){
             //retorno ou se esta vazio
             if(result.length > 0){
 
+                //Manipulação dos dados da Classificação
+                //Percorre o array de filmes 
+                for (filme of result){
+                    //Busca na controller da classificacao o ID referente a FK da classificacao
+                    let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+
+                    //Se encontrar o ID
+                    if(resultClassificacao.status){
+                        //Adicioa um atributo classificacao no JSON do filme e coloca o resultafo com os dados da classificacao
+                        filme.classificacao = resultClassificacao.response.classificacao
+                        //Apaga o id_classificacao do filme
+                        delete filme.id_classificacao
+                    }
+
+                }
+
                 customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                 customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                 customMessage.DEFAULT_MESSAGE.response.count = result.length
@@ -122,6 +141,22 @@ const buscarFilme = async function(id){
                 //Validação para verificar se o DAO tem algum dado no Array
                 if(result.length > 0){
 
+                    //Manipulação dos dados da Classificação
+                    //Percorre o array de filmes 
+                    for (filme of result){
+                        //Busca na controller da classificacao o ID referente a FK da classificacao
+                        let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
+
+                        //Se encontrar o ID
+                        if(resultClassificacao.status){
+                            //Adicioa um atributo classificacao no JSON do filme e coloca o resultafo com os dados da classificacao
+                            filme.classificacao = resultClassificacao.response.classificacao
+                            //Apaga o id_classificacao do filme
+                            delete filme.id_classificacao
+                        }
+
+                    }
+
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
                     customMessage.DEFAULT_MESSAGE.response.filme = result
@@ -135,6 +170,8 @@ const buscarFilme = async function(id){
             }else{
                 return customMessage.ERROR_INTERNAL_SERVER_MODEL //500 MODEL
             }
+
+            //Esse else não precisa de Erros pois os anteriores ja fazem isso
             
         }
 
@@ -253,6 +290,10 @@ const validarDados = async function(filme){
 
     }else if(filme.avaliacao == undefined || isNaN(filme.avaliacao) || filme.avaliacao.length > 3){
         customMessage.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO] INVALIDO'
+        return customMessage.ERROR_BAD_REQUEST
+
+    }else if(filme.id_classificacao == undefined || isNaN(filme.id_classificacao) || filme.id_classificacao == null || filme.id_classificacao == ""){
+        customMessage.ERROR_BAD_REQUEST.field = '[ID_CLASSIFICACAO] INVALIDO'
         return customMessage.ERROR_BAD_REQUEST
 
     }else{

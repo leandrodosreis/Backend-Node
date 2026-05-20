@@ -54,15 +54,116 @@ const inserirNovaClassificacao = async function (classificacao, contentType) {
 }
 
 const listarClassificacao = async function () {
+
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        let result = await classificacaoDAO.selectAllClassificacao()
+        
+        if(result.length > 0){
+            customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+            customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+            customMessage.DEFAULT_MESSAGE.response.count = result.length
+            customMessage.DEFAULT_MESSAGE.response.classificacao = result
+
+            return customMessage.DEFAULT_MESSAGE
+
+        }else{
+            return customMessage.ERROR_INTERNAL_SERVER_MODEL
+        }
+
+    } catch (error) {
+        return configMessages.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
     
 }
 
 const buscarClassificacao = async function (id) {
-    
+
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        
+        if(id == undefined || id == null || id == '' || isNaN(id) || String(id).replaceAll(' ','') == '' || id <= 0){
+            customMessage.ERROR_BAD_REQUEST.field = "[ID] INVALIDO"
+            return customMessage.ERROR_BAD_REQUEST
+
+        }else{
+
+            let result = await classificacaoDAO.selectByIdClassificacao(id)
+
+            if(result){
+
+                if(result.length > 0){
+                    customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
+                    customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
+                    customMessage.DEFAULT_MESSAGE.response = result
+
+                    return customMessage.DEFAULT_MESSAGE
+                }else{
+                    return customMessage.ERROR_NOT_FOUND
+                }
+
+            }else{
+
+                return customMessage.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        }
+
+    } catch (error) {
+        return configMessages.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 const atualizarClassificacao = async function (classificacao, id, contentType) {
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
     
+    try {
+        
+        if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
+
+            let resultBuscarClassificacao = await buscarClassificacao(id)
+
+            if(resultBuscarClassificacao.status){
+
+                let validar = await validarDados(await tratarDados(classificacao))
+
+                if(!validar){
+
+                    classificacao.id = Number(id)
+
+                    let result = await classificacaoDAO.updateClassificacao(classificacao)
+
+                        if(result){
+                        customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
+                        customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
+                        customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
+                        customMessage.DEFAULT_MESSAGE.response = classificacao
+
+                        return customMessage.DEFAULT_MESSAGE
+
+                        }else{
+
+                        return customMessage.ERROR_INTERNAL_SERVER_MODEL
+
+                        }
+
+                }else{
+                    return validar
+                }
+
+            }else{
+                return resultBuscarClassificacao
+            }
+
+        }else{
+            return customMessage.ERROR_CONTENT_TYPE
+        }
+
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 const excluirClassificacao = async function (id) {
@@ -75,9 +176,21 @@ const validarDados = async function (classificacao) {
 
     try {
         
-        if(classificacao.publico == undefined || classificacao.publico == "" || classificacao.publico == null || classificacao.publico.legth > 35){
+        if(classificacao.sigla == undefined || classificacao.sigla == "" || classificacao.sigla == null || classificacao.sigla.legth > 5){
 
-            customMessage.ERROR_BAD_REQUEST.field = '[PUBLICO] INVALIDO'
+            customMessage.ERROR_BAD_REQUEST.field = '[SIGLA] INVALIDO'
+
+            return customMessage.ERROR_BAD_REQUEST
+
+        }else if(classificacao.nome == undefined || classificacao.nome == "" || classificacao.nome == null || classificacao.nome.legth > 45){
+
+            customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVALIDO'
+
+            return customMessage.ERROR_BAD_REQUEST
+
+        }else if(classificacao.descricao == undefined || classificacao.descricao == "" || classificacao.descricao == null || classificacao.descricao.legth > 200){
+
+            customMessage.ERROR_BAD_REQUEST.field = '[CLASSIFICACAO] INVALIDO'
 
             return customMessage.ERROR_BAD_REQUEST
 
@@ -92,7 +205,9 @@ const validarDados = async function (classificacao) {
 }
 
 const tratarDados = async function (classificacao) {
-    classificacao.publico            = classificacao.publico.replaceAll("'", "")
+    classificacao.sigla            = classificacao.sigla.replaceAll("'", "")
+    classificacao.nome            = classificacao.nome.replaceAll("'", "")
+    classificacao.descricao            = classificacao.descricao.replaceAll("'", "")
 
     return classificacao
 }

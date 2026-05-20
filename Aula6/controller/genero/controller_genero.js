@@ -144,6 +144,7 @@ const buscarGenero = async function (id) {
     }
 }
 
+//Atualizar um genero
 const atualizarGenero = async function (genero, id, contentType) {
 
     //Cria uma copia das mensagens de resposta
@@ -205,7 +206,6 @@ const atualizarGenero = async function (genero, id, contentType) {
         return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-
 
 //Excluir Genero 
 const excluirGenero = async function (id) {

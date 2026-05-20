@@ -18,11 +18,15 @@ const InsertClassificacao = async function (classificacao) {
     
     try {
         
-        let sql = `
-        insert into tbl_classificacao (
-                    publico
-                    ) values (
-                    '${classificacao.publico}'
+        let sql = `insert into tbl_classificacao (
+            sigla,
+            nome,
+            descricao
+
+        ) values (
+            '${classificacao.sigla}',
+            '${classificacao.nome}',
+            '${classificacao.descricao}'
         );`
 
         let result = await knexConection.raw(sql)
@@ -39,14 +43,67 @@ const InsertClassificacao = async function (classificacao) {
 }
 
 const selectAllClassificacao = async function () {
+
+    try {
+        let sql = `select * from tbl_classificacao order by id desc;`
+
+        let result = await knexConection.raw(sql)
+
+        if(Array.isArray(result)){
+            return result[0]
+        }else{
+            return false
+        }
+
+
+    } catch (error) {
+        return false
+    }
     
 }
 
-const selectByIdClassificacao = async function () {
+const selectByIdClassificacao = async function (id) {
+
+    try {
+        
+        let sql = `select * from tbl_classificacao where id = ${id};`
+
+        let result = await knexConection.raw(sql)
+
+        if(Array.isArray(result)){
+
+            return result[0]
+
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
     
 }
 
-const updateClassificacao = async function () {
+const updateClassificacao = async function (classificacao) {
+    try {
+
+        let sql = `update tbl_classificacao set
+                        sigla = '${classificacao.sigla}',
+                        nome = '${classificacao.nome}',
+                        descricao = '${classificacao.descricao}'
+                    where id = ${classificacao.id};`
+
+        let result = await knexConection.raw(sql)
+
+        if(result){
+            return true
+        }else{
+            return false
+        }
+        
+    } catch (error) {
+        return false
+    }
     
 }
 
@@ -55,5 +112,9 @@ const deleteClassificacao = async function () {
 }
 
 module.exports = {
-    InsertClassificacao
+    InsertClassificacao,
+    selectAllClassificacao,
+    selectByIdClassificacao,
+    updateClassificacao,
+    deleteClassificacao
 }

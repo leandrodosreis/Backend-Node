@@ -44,7 +44,7 @@ const insertGenero = async function(genero){
 const selectAllGenero = async function(){
         try {
         //Script sql para listar todos os generos
-        let sql = 'select * from tbl_genero order by id desc'
+        let sql = 'select * from tbl_genero order by id desc;'
 
         //Executa no banco o script e guarda o retorno do banco
         //Pode ser um ERRO(false) ou um array com os dados
