@@ -97,7 +97,7 @@ const buscarClassificacao = async function (id) {
                 if(result.length > 0){
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
-                    customMessage.DEFAULT_MESSAGE.response = result
+                    customMessage.DEFAULT_MESSAGE.response.classificacao = result
 
                     return customMessage.DEFAULT_MESSAGE
                 }else{
