@@ -176,19 +176,19 @@ const validarDados = async function (classificacao) {
 
     try {
         
-        if(classificacao.sigla == undefined || classificacao.sigla == "" || classificacao.sigla == null || classificacao.sigla.legth > 5){
+        if(classificacao.sigla == undefined || classificacao.sigla == "" || classificacao.sigla == null || classificacao.sigla.length > 5){
 
             customMessage.ERROR_BAD_REQUEST.field = '[SIGLA] INVALIDO'
 
             return customMessage.ERROR_BAD_REQUEST
 
-        }else if(classificacao.nome == undefined || classificacao.nome == "" || classificacao.nome == null || classificacao.nome.legth > 45){
+        }else if(classificacao.nome == undefined || classificacao.nome == "" || classificacao.nome == null || classificacao.nome.length > 45){
 
             customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVALIDO'
 
             return customMessage.ERROR_BAD_REQUEST
 
-        }else if(classificacao.descricao == undefined || classificacao.descricao == "" || classificacao.descricao == null || classificacao.descricao.legth > 200){
+        }else if(classificacao.descricao == undefined || classificacao.descricao == "" || classificacao.descricao == null || classificacao.descricao.length > 200){
 
             customMessage.ERROR_BAD_REQUEST.field = '[CLASSIFICACAO] INVALIDO'
 
