@@ -100,7 +100,7 @@ alter table tbl_filme
 		foreign key (id_classificacao)
         references tbl_classificacao(id);
 
-desc tbl_filme;
+desc tbl_classificacao;
 
 create table tbl_filme_genero (
 	id			int not null auto_increment primary key,
@@ -114,4 +114,16 @@ create table tbl_filme_genero (
 	constraint FK_GENERO_FILMEGENERO
     foreign key (id_genero)
     references tbl_genero(id)
+);
+
+
+create table tbl_cargo (
+	id			int not null auto_increment primary key,
+    funcao		varchar(30) not null
+);
+
+create table tbl_sexo (
+	id			int not null auto_increment primary key,
+    sigla		varchar(3) not null,
+    genero		varchar(15)
 );

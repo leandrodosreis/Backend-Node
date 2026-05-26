@@ -1,15 +1,15 @@
 /*
-Objetivo: Arquivo responsavel pela validação, tratamento, manipulação de dados para realizar o CRUD de classificacao
+Objetivo: Arquivo responsavel pela validação, tratamento, manipulação de dados para realizar o CRUD de cargo
 Data: 15/05/2026
 Autor: Leandro
 Versão: 1.0
 */
 
-const classificacaoDAO = require('../../model/DAO/classificacao/classificacao.js')
+const cargoDAO = require('../../model/DAO/cargo/cargo.js')
 
 const configMessages = require('../modulo/configMessages.js')
 
-const inserirNovaClassificacao = async function (classificacao, contentType) {
+const inserirNovoCargo = async function (cargo, contentType) {
 
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
@@ -17,7 +17,7 @@ const inserirNovaClassificacao = async function (classificacao, contentType) {
     
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-            let validar = await validarDados(classificacao)
+            let validar = await validarDados(cargo)
 
             if(validar){
 
@@ -25,15 +25,15 @@ const inserirNovaClassificacao = async function (classificacao, contentType) {
         
             }else{
 
-                let result = await classificacaoDAO.InsertClassificacao(await tratarDados(classificacao))
+                let result = await cargoDAO.insertCargo(await tratarDados(cargo))
 
                 if(result){
 
-                    classificacao.id = result
+                    cargo.id = result
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_CREATED_ITEM.status_code
                     customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_CREATED_ITEM.message
-                    customMessage.DEFAULT_MESSAGE.response = classificacao
+                    customMessage.DEFAULT_MESSAGE.response = cargo
 
                     return customMessage.DEFAULT_MESSAGE
 
@@ -53,18 +53,18 @@ const inserirNovaClassificacao = async function (classificacao, contentType) {
     }
 }
 
-const listarClassificacao = async function () {
+const listarCargos = async function () {
 
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
-        let result = await classificacaoDAO.selectAllClassificacao()
+        let result = await cargoDAO.selectAllCargo()
         
         if(result.length > 0){
             customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
             customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
             customMessage.DEFAULT_MESSAGE.response.count = result.length
-            customMessage.DEFAULT_MESSAGE.response.classificacao = result
+            customMessage.DEFAULT_MESSAGE.response.cargo = result
 
             return customMessage.DEFAULT_MESSAGE
 
@@ -78,7 +78,7 @@ const listarClassificacao = async function () {
     
 }
 
-const buscarClassificacao = async function (id) {
+const buscarCargo = async function (id) {
 
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
@@ -90,14 +90,13 @@ const buscarClassificacao = async function (id) {
 
         }else{
 
-            let result = await classificacaoDAO.selectByIdClassificacao(id)
-
+            let result = await cargoDAO.selectByIdCargo(id)
             if(result){
 
                 if(result.length > 0){
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
                     customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_RESPONSE.status_code
-                    customMessage.DEFAULT_MESSAGE.response.classificacao = result
+                    customMessage.DEFAULT_MESSAGE.response.cargo = result
 
                     return customMessage.DEFAULT_MESSAGE
                 }else{
@@ -116,30 +115,30 @@ const buscarClassificacao = async function (id) {
     }
 }
 
-const atualizarClassificacao = async function (classificacao, id, contentType) {
+const atualizarCargo = async function (cargo, id, contentType) {
     let customMessage = JSON.parse(JSON.stringify(configMessages))
     
     try {
         
         if(String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-            let resultBuscarClassificacao = await buscarClassificacao(id)
+            let resultBuscarCargo = await buscarCargo(id)
 
-            if(resultBuscarClassificacao.status){
+            if(resultBuscarCargo.status){
 
-                let validar = await validarDados(await tratarDados(classificacao))
+                let validar = await validarDados(await tratarDados(cargo))
 
                 if(!validar){
 
-                    classificacao.id = Number(id)
+                    cargo.id = Number(id)
 
-                    let result = await classificacaoDAO.updateClassificacao(classificacao)
+                    let result = await cargoDAO.updateCargo(cargo)
 
                         if(result){
                         customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message = customMessage.SUCCESS_UPDATED_ITEM.message
-                        customMessage.DEFAULT_MESSAGE.response = classificacao
+                        customMessage.DEFAULT_MESSAGE.response = cargo
 
                         return customMessage.DEFAULT_MESSAGE
 
@@ -154,7 +153,7 @@ const atualizarClassificacao = async function (classificacao, id, contentType) {
                 }
 
             }else{
-                return resultBuscarClassificacao
+                return resultBuscarCargo
             }
 
         }else{
@@ -166,17 +165,17 @@ const atualizarClassificacao = async function (classificacao, id, contentType) {
     }
 }
 
-const excluirClassificacao = async function (id) {
+const excluirCargo = async function (id) {
     //Cria uma copia das mensagens de resposta
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
 
-        let resultBuscarClassificacao = await buscarClassificacao(id)
+        let resultBuscarCargo = await buscarCargo(id)
 
-        if(resultBuscarClassificacao.status){
+        if(resultBuscarCargo.status){
 
-            let result = await classificacaoDAO.deleteClassificacao(id)
+            let result = await cargoDAO.deleteCargo(id)
 
             //Se a exclusão ocorrer corretamente retornamos uma mensagem de sucesso
             if(result){
@@ -190,7 +189,7 @@ const excluirClassificacao = async function (id) {
 
         }else{
 
-            return resultBuscarClassificacao
+            return resultBuscarCargo
         }
         
     } catch (error) {
@@ -198,27 +197,15 @@ const excluirClassificacao = async function (id) {
     }
 }
 
-const validarDados = async function (classificacao) {
+const validarDados = async function (cargo) {
     
     let customMessage = JSON.parse(JSON.stringify(configMessages))
 
     try {
         
-        if(classificacao.sigla == undefined || classificacao.sigla == "" || classificacao.sigla == null || classificacao.sigla.length > 5){
+        if(cargo.funcao == undefined || cargo.funcao == "" || cargo.funcao == null || cargo.funcao.length > 30){
 
-            customMessage.ERROR_BAD_REQUEST.field = '[SIGLA] INVALIDO'
-
-            return customMessage.ERROR_BAD_REQUEST
-
-        }else if(classificacao.nome == undefined || classificacao.nome == "" || classificacao.nome == null || classificacao.nome.length > 45){
-
-            customMessage.ERROR_BAD_REQUEST.field = '[NOME] INVALIDO'
-
-            return customMessage.ERROR_BAD_REQUEST
-
-        }else if(classificacao.descricao == undefined || classificacao.descricao == "" || classificacao.descricao == null || classificacao.descricao.length > 200){
-
-            customMessage.ERROR_BAD_REQUEST.field = '[CLASSIFICACAO] INVALIDO'
+            customMessage.ERROR_BAD_REQUEST.field = '[FUNCAO] INVALIDA'
 
             return customMessage.ERROR_BAD_REQUEST
 
@@ -232,18 +219,16 @@ const validarDados = async function (classificacao) {
     }
 }
 
-const tratarDados = async function (classificacao) {
-    classificacao.sigla            = classificacao.sigla.replaceAll("'", "")
-    classificacao.nome            = classificacao.nome.replaceAll("'", "")
-    classificacao.descricao            = classificacao.descricao.replaceAll("'", "")
+const tratarDados = async function (cargo) {
+    cargo.funcao            = cargo.funcao.replaceAll("'", "")
 
-    return classificacao
+    return cargo
 }
 
 module.exports = {
-    inserirNovaClassificacao,
-    listarClassificacao,
-    buscarClassificacao,
-    atualizarClassificacao,
-    excluirClassificacao
+    inserirNovoCargo,
+    listarCargos,
+    buscarCargo,
+    atualizarCargo,
+    excluirCargo
 }

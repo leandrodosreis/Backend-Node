@@ -24,6 +24,7 @@ app.use(cors(cosrsOptions))
 const controllerFilme = require('./controller/filme/controller_filme.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
+const controllerCargo = require('./controller/cargo/controller_cargo.js')
 
 //ENDPOINTS FILME
 app.post('/v1/senai/locadora/filme', bodyParserJSON, async function(request, response){
@@ -196,6 +197,76 @@ app.put('/v1/senai/locadora/classificacao/:id', bodyParserJSON, async function (
     response.json(result)
 })
 
+app.delete('/v1/senai/locadora/classificacao/:id', async function (request, response) {
+
+    let id = request.params.id
+
+    let result = await controllerClassificacao.excluirClassificacao(id)
+
+    response.status(result.status_code)
+    response.json(result)
+    
+})
+
+//ENDPOINTS CARGO
+
+app.post('/v1/senai/locadora/cargo', bodyParserJSON, async function (request, response) {
+    
+    let dados = request.body
+
+    let contentType = request.headers['content-type']
+
+    let result = await controllerCargo.inserirNovoCargo(dados, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+
+})
+
+app.get('/v1/senai/locadora/cargo', async function (request, response) {
+    
+    let result = await controllerCargo.listarCargos()
+
+    response.status(result.status_code)
+    response.json(result)
+    
+})
+
+app.get('/v1/senai/locadora/cargo/:id', async function (request, response) {
+
+    let id = request.params.id
+    
+    let result = await controllerCargo.buscarCargo(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+    
+})
+
+app.put('/v1/senai/locadora/cargo/:id', bodyParserJSON, async function (request, response) {
+    
+    let contentType = request.headers['content-type']
+
+    let id = request.params.id
+
+    let dados = request.body
+
+    let result = await controllerCargo.atualizarCargo(dados, id, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/cargo/:id', async function (request, response) {
+
+    let id = request.params.id
+
+    let result = await controllerCargo.excluirCargo(id)
+
+    response.status(result.status_code)
+    response.json(result)
+    
+})
 //Logica da ordem DAO > Controller > app
 
 //Fazer o start na API(aguardando as requisições)
