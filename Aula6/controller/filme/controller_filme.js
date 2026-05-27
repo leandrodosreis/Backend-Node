@@ -44,14 +44,18 @@ const inserirNovoFilme = async function(filme, contentType){
 
                     //Manipulação de dados para inserir os Generos relacionados ao filme
                     //Percorre o array de generos que chegara na requisição pelo objeto filme
-                    for(itemFilme of filme.genero){
+                    for(itemGenero of filme.genero){
                         let filmeGenero = {
                                     'id_filme' : filme.id,
-                                    'id_genero' : itemFilme.id
+                                    'id_genero' : itemGenero.id
                         }
 
                         let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
-                        console.log(resultFilmeGenero)
+                        
+                        //vALIDAÇÃO PARA VERIFICAR SE TODOS OS ITENS DE RELACIONAMENTO FORAM INSERIDOS
+                        if(!resultFilmeGenero.status){
+                            return customMessage.SUCCESS_CREATED_ITEM_WARNING //201 COM ALERT
+                        }
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_CREATED_ITEM.status
@@ -107,6 +111,13 @@ const listarFilme = async function(){
                         filme.classificacao = resultClassificacao.response.classificacao
                         //Apaga o id_classificacao do filme
                         delete filme.id_classificacao
+                    }
+
+                    //Manipulação de dados para retornar os generos relacionados aos filmes
+                    let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+
+                    if(resultGeneros.status){
+                        filme.genero = resultGeneros.response.filme_genero
                     }
 
                 }
@@ -168,6 +179,13 @@ const buscarFilme = async function(id){
                             filme.classificacao = resultClassificacao.response.classificacao
                             //Apaga o id_classificacao do filme
                             delete filme.id_classificacao
+                        }
+
+                         //Manipulação de dados para retornar os generos relacionados aos filmes
+                        let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
+
+                        if(resultGeneros.status){
+                            filme.genero = resultGeneros.response.filme_genero
                         }
 
                     }
