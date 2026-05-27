@@ -324,6 +324,31 @@ const excluirFilmeGenero = async function (id) {
     }
 }
 
+//Excluir a relação de generos com o filme 
+const excluirGenerosIdFilme = async function (idFilme) {
+
+    //Cria uma copia das mensagens de resposta
+    let customMessage = JSON.parse(JSON.stringify(configMessages))
+
+    try {
+        //Deletamos o genero do DB
+        let result = await filmeGeneroDAO.deleteGenerosByIdFilme(idFilme)
+
+        //Se a exclusão ocorrer corretamente retornamos uma mensagem de sucesso
+        if(result){
+            
+            return customMessage.SUCCESS_DELETED_ITEM
+
+            //Se a exclusãofalhar o erro foi na moedel
+        }else{
+            return customMessage.ERROR_INTERNAL_SERVER_MODEL //500
+        }
+        
+    } catch (error) {
+        return customMessage.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 //Valida dados do filmegenero
 const validarDados = async function(filmeGenero){
 
@@ -348,5 +373,6 @@ module.exports = {
     atualizarFilmeGenero,
     excluirFilmeGenero,
     buscarGenerosIdFilme,
-    buscarFilmesIdGenero
+    buscarFilmesIdGenero,
+    excluirGenerosIdFilme
 }

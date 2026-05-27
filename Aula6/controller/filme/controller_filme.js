@@ -238,6 +238,29 @@ const atualizarFilme = async function(filme, id, contentType){
                     let result = await filmeDAO.updateFilme(filme)
 
                     if(result){
+                        
+                        //Excluir as relações entre o filme e os generos (tabela de relação)
+                        let resultDeleteGeneros = await controllerFilmeGenero.excluirGenerosIdFilme(filme.id)
+
+                        if(resultDeleteGeneros.status){
+
+                            //Manipulação de dados para inserir os Generos relacionados ao filme
+                            //Percorre o array de generos que chegara na requisição pelo objeto filme
+                            for(itemGenero of filme.genero){
+                                let filmeGenero = {
+                                            'id_filme' : filme.id,
+                                            'id_genero' : itemGenero.id
+                                }
+        
+                                let resultFilmeGenero = await controllerFilmeGenero.inserirNovoFilmeGenero(filmeGenero)
+                                
+                                //vALIDAÇÃO PARA VERIFICAR SE TODOS OS ITENS DE RELACIONAMENTO FORAM INSERIDOS
+                                if(!resultFilmeGenero.status){
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING //201 COM ALERT
+                                }
+                            }
+                        }
+
                         customMessage.DEFAULT_MESSAGE.status      = customMessage.SUCCESS_UPDATED_ITEM.status
                         customMessage.DEFAULT_MESSAGE.status_code = customMessage.SUCCESS_UPDATED_ITEM.status_code
                         customMessage.DEFAULT_MESSAGE.message     = customMessage.SUCCESS_UPDATED_ITEM.message
