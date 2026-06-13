@@ -125,5 +125,12 @@ create table tbl_cargo (
 create table tbl_sexo (
 	id			int not null auto_increment primary key,
     sigla		varchar(3) not null,
-    genero		varchar(15)
+    nome		varchar(15)
 );
+
+create table tbl_nacionalidade (
+	id	int not null auto_increment primary key,
+    nome	varchar(50) not null
+);
+
+show tables;
