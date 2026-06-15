@@ -36,6 +36,9 @@ app.use('/v1/senai/locadora/nacionalidade', cors(), nacionalidadeRouter)
 const sexoRouter = require('./routes/sexo.router.js')
 app.use('/v1/senai/locadora/sexo',cors(), sexoRouter)
 
+const pessoaRouter = require('./routes/pessoa.router.js')
+app.use('/v1/senai/locadora/pessoa',cors(), pessoaRouter)
+
 const generoRouter = require('./routes/genero.router.js')
 app.use('/v1/senai/locadora/genero', cors(), generoRouter)
 

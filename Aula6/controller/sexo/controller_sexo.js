@@ -207,7 +207,7 @@ const validarDados = async function (sexo) {
         
         if(sexo.sigla == undefined || sexo.sigla == "" || sexo.sigla == null || sexo.sigla.length > 5){
 
-            customMessage.ERROR_BAD_REQUEST.field = '[SIGLA] INVALIDO'
+            customMessage.ERROR_BAD_REQUEST.field = '[SIGLA] INVALIDA'
 
             return customMessage.ERROR_BAD_REQUEST
 
