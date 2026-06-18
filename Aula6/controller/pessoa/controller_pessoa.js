@@ -14,6 +14,7 @@ const pessoaDAO = require('../../model/DAO/pessoa/pessoa.js')
 //Import das Controllers
 const controllerSexo = require('../sexo/controller_sexo.js')
 const controllerPessoaNacionalidade = require('./controller_pessoa_nacionalidade.js')
+const controllerCargoPessoa = require('./controller_cargo_pessoa.js')
 
 
 // Função para inserir um novo filme 
@@ -55,6 +56,21 @@ const inserirNovoPessoa = async function(pessoa, contentType){
                         //vALIDAÇÃO PARA VERIFICAR SE TODOS OS ITENS DE RELACIONAMENTO FORAM INSERIDOS
                         if(!resultPessoaNacionalidade.status){
                             return customMessage.SUCCESS_CREATED_ITEM_WARNING //201 COM ALERT
+                        }
+                    }
+
+                    for(itemCargo of pessoa.cargo){
+
+                        let cargoPessoa = {
+                            id_pessoa: pessoa.id,
+                            id_cargo: itemCargo.id
+                        }
+
+                        let resultCargoPessoa =
+                            await controllerCargoPessoa.inserirNovoCargoPessoa(cargoPessoa)
+
+                        if(!resultCargoPessoa.status){
+                            return customMessage.SUCCESS_CREATED_ITEM_WARNING
                         }
                     }
 
@@ -118,6 +134,12 @@ const listarPessoa = async function(){
 
                     if(resultNacionalidade.status){
                         pessoa.nacionalidade = resultNacionalidade.response.pessoa_nacionalidade
+                    }
+
+                    let resultCargo = await controllerCargoPessoa.buscarCargoIdPessoa(pessoa.id)
+
+                    if(resultCargo.status){
+                        pessoa.cargo = resultCargo.response.cargo_pessoa
                     }
 
                 }
@@ -188,6 +210,12 @@ const buscarPessoa = async function(id){
                         pessoa.nacionalidade = resultNacionalidade.response.pessoa_nacionalidade
                     }
 
+                    let resultCargo = await controllerCargoPessoa.buscarCargoIdPessoa(pessoa.id)
+
+                    if(resultCargo.status){
+                        pessoa.cargo = resultCargo.response.cargo_pessoa
+                    }
+
                     }
 
                     customMessage.DEFAULT_MESSAGE.status = customMessage.SUCCESS_RESPONSE.status
@@ -242,7 +270,9 @@ const atualizarPessoa = async function(pessoa, id, contentType){
                         //Excluir as relações entre o filme e os generos (tabela de relação)
                         let resultDeleteNacionalidade = await controllerPessoaNacionalidade.excluirNacionalidadeIdPessoa(pessoa.id)
 
-                        if(resultDeleteNacionalidade.status){
+                        let resultDeleteCargo = await controllerCargoPessoa.excluirCargoIdPessoa(pessoa.id)
+
+                        if(resultDeleteNacionalidade.status && resultDeleteCargo.status){
 
                             //Manipulação de dados para inserir os Generos relacionados ao filme
                             //Percorre o array de generos que chegara na requisição pelo objeto filme
@@ -258,6 +288,20 @@ const atualizarPessoa = async function(pessoa, id, contentType){
                             if(!resultPessoaNacionalidade.status){
                                 return customMessage.SUCCESS_CREATED_ITEM_WARNING //201 COM ALERT
                             }
+                            }
+
+                            for(itemCargo of pessoa.cargo){
+
+                                let cargoPessoa = {
+                                    'id_pessoa': pessoa.id,
+                                    'id_cargo': itemCargo.id
+                                }
+
+                                let resultCargoPessoa = await controllerCargoPessoa.inserirNovoCargoPessoa(cargoPessoa)
+
+                                if(!resultCargoPessoa.status){
+                                    return customMessage.SUCCESS_CREATED_ITEM_WARNING
+                                }
                             }
 
 
